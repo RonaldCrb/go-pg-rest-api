@@ -8,8 +8,6 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
-// database connection
-
 func main() {
 	homeController := controllers.NewHomeController()
 	userController := controllers.NewUserController()

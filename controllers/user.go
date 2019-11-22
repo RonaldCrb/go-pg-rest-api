@@ -19,17 +19,22 @@ func NewUserController() *UserController {
 
 // UserIndex => returns a slice of all users
 func (uc UserController) UserIndex(res http.ResponseWriter, req *http.Request, params httprouter.Params) {
-
-	usr := models.User{
-		ID:        "1",
-		FirstName: "Pedrito",
-		LastName:  "Palotes, de los",
-		Email:     "test@email.com",
+	if req.Method != "GET" {
+		http.Error(res, http.StatusText(405), http.StatusMethodNotAllowed)
+		return
 	}
 
-	uj, err := json.Marshal(usr)
+	usrs, err := models.AllUsers()
+
 	if err != nil {
-		fmt.Println(err)
+		http.Error(res, http.StatusText(500), http.StatusInternalServerError)
+		return
+	}
+
+	uj, err := json.Marshal(usrs)
+	if err != nil {
+		http.Error(res, http.StatusText(500), http.StatusInternalServerError)
+		return
 	}
 
 	res.Header().Set("Content-Type", "application/json")
