@@ -8,20 +8,22 @@ CREATE DATABASE users;
 ## creating table
 ```sql
 CREATE TABLE users (
-	id       		char(14) PRIMARY KEY NOT NULL,
-	first_name 	varchar(255) NOT NULL,
-	last_name 	varchar(255) NOT NULL,
-	email				varchar(255) NOT NULL
+	id       		SERIAL PRIMARY KEY NOT NULL,
+	firstName 	VARCHAR(255) NOT NULL,
+	LastName 	VARCHAR(255) NOT NULL,
+	email				VARCHAR(255) NOT NULL,
+  createdAt TIMESTAMP NOT NULL DEFAULT NOW(),
+  updatedAt TIMESTAMP NOT NULL DEFAULT NOW()
 );
 ```
 ## inserting records (rows)
 ```sql
 INSERT INTO users 
-(id, first_name, last_name, email) 
+(FirstName, LastName, Email) 
 VALUES 
-('1', 'ron', 'alonzo', 'alonzo.ronald@gmail.com'),
-('2', 'maredy', 'glines', 'maredy.glines@gmail.com'),
-('3', 'luisa', 'diaz', 'luisa.diaz@gmail.com'),
-('4', 'johana', 'mata', 'johana.mata@gmail.com'),
-('5', 'juan', 'perez', 'juan.perez@gmail.com');```
+('rick', 'grimes', 'rick.grimes@email.com'),
+('mary', 'jane', 'mary.jane@email.com'),
+('luisa', 'diaz', 'luisa.diaz@email.com'),
+('johana', 'mata', 'johana.mata@email.com'),
+('juan', 'perez', 'juan.perez@email.com');
 ```

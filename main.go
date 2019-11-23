@@ -4,18 +4,29 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/RonaldCrb/go-mc/controllers"
+	"github.com/RonaldCrb/go-mc/home"
+	"github.com/RonaldCrb/go-mc/users"
 	"github.com/julienschmidt/httprouter"
 )
 
 func main() {
-	homeController := controllers.NewHomeController()
-	userController := controllers.NewUserController()
 
 	router := httprouter.New()
-	router.GET("/", homeController.Home)
-	router.GET("/healthCheck", homeController.HealthCheck)
-	router.GET("/users", userController.UserIndex)
+	router.GET("/", home.Main)
+	router.GET("/healthCheck", home.HealthCheck)
+	router.POST("/users", users.UserCreate)
+	router.GET("/users", users.UserIndex)
+	router.GET("/users/:id", users.UserFind)
+	router.PUT("/users/:id", users.UserUpdate)
+	router.DELETE("/users/:id", users.UserDelete)
 
 	log.Fatal(http.ListenAndServe(":8080", router))
+}
+
+// CheckError checks for errors
+func CheckError(err error) {
+	if err != nil {
+		log.Fatal(err)
+	}
+	return
 }

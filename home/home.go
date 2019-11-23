@@ -1,4 +1,4 @@
-package controllers
+package home
 
 import (
 	"encoding/json"
@@ -9,27 +9,19 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
-// HomeController ...
-type HomeController struct{}
-
 // Greeting ...
 type Greeting struct {
 	Message string
 }
 
-// HealthCheck ...
-type HealthCheck struct {
-	Message   string
+// HealthStatus ...
+type HealthStatus struct {
+	Status    string
 	TimeStamp string
 }
 
-// NewHomeController => utility function to generate HomeController pointer
-func NewHomeController() *HomeController {
-	return &HomeController{}
-}
-
-// Home => main endpoint
-func (hc HomeController) Home(res http.ResponseWriter, req *http.Request, params httprouter.Params) {
+// Main => main endpoint
+func Main(res http.ResponseWriter, req *http.Request, params httprouter.Params) {
 	g := Greeting{Message: "Hello Visitor"}
 
 	gj, err := json.Marshal(g)
@@ -40,14 +32,15 @@ func (hc HomeController) Home(res http.ResponseWriter, req *http.Request, params
 	res.Header().Set("Content-Type", "application/json")
 	res.WriteHeader(http.StatusOK)
 	fmt.Fprintf(res, "%s\n", gj)
+	fmt.Println("[HOME] => Main function")
 }
 
 // HealthCheck => utility endpoint for healthchecks
-func (hc HomeController) HealthCheck(res http.ResponseWriter, req *http.Request, params httprouter.Params) {
+func HealthCheck(res http.ResponseWriter, req *http.Request, params httprouter.Params) {
 	currentTime := time.Now()
 
-	g := HealthCheck{
-		Message:   "Hello Visitor",
+	g := HealthStatus{
+		Status:    "GO-MC Healthy!",
 		TimeStamp: currentTime.Format("2006-01-02 15:04:05"),
 	}
 
@@ -59,4 +52,6 @@ func (hc HomeController) HealthCheck(res http.ResponseWriter, req *http.Request,
 	res.Header().Set("Content-Type", "application/json")
 	res.WriteHeader(http.StatusOK)
 	fmt.Fprintf(res, "%s\n", gj)
+	fmt.Println("[HOME] => HealthCheck function")
+
 }
