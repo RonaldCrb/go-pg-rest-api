@@ -30,12 +30,12 @@ after database is created, run this command to create a users table
 
 ```sql
 CREATE TABLE users (
-	    id       	    SERIAL PRIMARY KEY NOT NULL,
-	    firstName     	VARCHAR(255) NOT NULL,
-	    LastName 	    VARCHAR(255) NOT NULL,
-	    email			VARCHAR(255) NOT NULL,
-        createdAt       TIMESTAMP NOT NULL DEFAULT NOW(),
-        updatedAt       TIMESTAMP NOT NULL DEFAULT NOW()
+	id       	    SERIAL PRIMARY KEY NOT NULL,
+	firstName     	VARCHAR(255) NOT NULL,
+	LastName 	    VARCHAR(255) NOT NULL,
+	email			VARCHAR(255) NOT NULL,
+    createdAt       TIMESTAMP NOT NULL DEFAULT NOW(),
+    updatedAt       TIMESTAMP NOT NULL DEFAULT NOW()
 );
 ```
 ## endpoints
