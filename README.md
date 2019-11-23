@@ -34,8 +34,8 @@ CREATE TABLE users (
 	firstName     	  VARCHAR(255) NOT NULL,
 	LastName 	  VARCHAR(255) NOT NULL,
 	email		  VARCHAR(255) NOT NULL,
-      createdAt         TIMESTAMP NOT NULL DEFAULT NOW(),
-      updatedAt         TIMESTAMP NOT NULL DEFAULT NOW()
+        createdAt         TIMESTAMP NOT NULL DEFAULT NOW(),
+        updatedAt         TIMESTAMP NOT NULL DEFAULT NOW()
 );
 ```
 ## endpoints
