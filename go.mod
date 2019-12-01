@@ -1,4 +1,4 @@
-module github.com/RonaldCrb/go-mc
+module github.com/RonaldCrb/go-pg-rest-api
 
 go 1.13
 

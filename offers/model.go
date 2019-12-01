@@ -1,4 +1,4 @@
-package lbtc
+package offers
 
 import (
 	"errors"
