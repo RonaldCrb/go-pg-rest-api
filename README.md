@@ -18,13 +18,7 @@ then this command will give you a psql shell with the appropriate user:
 docker exec -it pg psql postgres postgres
 ```
 
-## creating databases and tables
-
-inside the psql shell, create a database with this command (dont forget semi-colons)
-
-```sql
-CREATE DATABASE users;
-```
+## users Package
 
 after database is created, run this command to create a users table
 
@@ -74,3 +68,24 @@ a confirmation message and status code
 ### DELETE => http://localhost:8080/users/:id
 returns a JSON object with:
 a confirmation message and status code
+
+
+## lbtc package
+first create this table
+
+```sql
+CREATE TABLE btcoffers (
+  ID SERIAL PRIMARY KEY NOT NULL,
+  Title VARCHAR(255) NOT NULL,
+	Trader VARCHAR(255) NOT NULL,
+	Bank VARCHAR(255) NOT NULL,
+	Currency VARCHAR(255) NOT NULL,
+	Reputation SMALLINT,
+	Price money,
+	Min money,
+	Max money,
+	Index SMALLINT NOT NULL,
+  CreatedAt         TIMESTAMP NOT NULL DEFAULT NOW(),
+  UpdatedAt         TIMESTAMP NOT NULL DEFAULT NOW()
+);
+```

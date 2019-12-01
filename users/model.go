@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/RonaldCrb/go-mc/config"
+	"github.com/RonaldCrb/go-pg-rest-api/config"
 )
 
 // User represents a user instance
