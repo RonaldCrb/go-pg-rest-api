@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/julienschmidt/httprouter"
+	"github.com/gorilla/mux"
 )
 
 // GenericResponse returns timestamp and status to user in JSON
@@ -19,7 +19,7 @@ type GenericResponse struct {
 }
 
 // UserIndex => returns a slice of all users in the database
-func UserIndex(res http.ResponseWriter, req *http.Request, params httprouter.Params) {
+func UserIndex(res http.ResponseWriter, req *http.Request) {
 	if req.Method != "GET" {
 		http.Error(res, http.StatusText(405), http.StatusMethodNotAllowed)
 		return
@@ -34,7 +34,7 @@ func UserIndex(res http.ResponseWriter, req *http.Request, params httprouter.Par
 
 	uj, err := json.Marshal(usrs)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("[ERROR - USERS - CONTROLLER] => %v", err)
 		http.Error(res, http.StatusText(500), http.StatusInternalServerError)
 		return
 	}
@@ -46,7 +46,7 @@ func UserIndex(res http.ResponseWriter, req *http.Request, params httprouter.Par
 }
 
 // UserCreate creates a user instance in the database
-func UserCreate(res http.ResponseWriter, req *http.Request, params httprouter.Params) {
+func UserCreate(res http.ResponseWriter, req *http.Request) {
 	if req.Method != "POST" {
 		http.Error(res, http.StatusText(405), http.StatusMethodNotAllowed)
 		return
@@ -57,7 +57,7 @@ func UserCreate(res http.ResponseWriter, req *http.Request, params httprouter.Pa
 
 	err := usr.CreateUser()
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("[ERROR - USERS - CONTROLLER] => %v", err)
 		http.Error(res, http.StatusText(500), http.StatusInternalServerError)
 		return
 	}
@@ -70,7 +70,7 @@ func UserCreate(res http.ResponseWriter, req *http.Request, params httprouter.Pa
 
 	rj, err := json.Marshal(r)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("[ERROR - USERS - CONTROLLER] => %v", err)
 		http.Error(res, http.StatusText(500), http.StatusInternalServerError)
 		return
 	}
@@ -81,15 +81,16 @@ func UserCreate(res http.ResponseWriter, req *http.Request, params httprouter.Pa
 }
 
 // UserFind finds a user instance by ID in the database
-func UserFind(res http.ResponseWriter, req *http.Request, params httprouter.Params) {
+func UserFind(res http.ResponseWriter, req *http.Request) {
 	if req.Method != "GET" {
 		http.Error(res, http.StatusText(405), http.StatusMethodNotAllowed)
 		return
 	}
-	i := params.ByName("id")
+	vars := mux.Vars(req)
+	i := vars["id"]
 	id, err := strconv.Atoi(i)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("[ERROR - USERS - CONTROLLER] => %v", err)
 		http.Error(res, http.StatusText(404), http.StatusNotFound)
 		return
 	}
@@ -105,7 +106,7 @@ func UserFind(res http.ResponseWriter, req *http.Request, params httprouter.Para
 
 	uj, err := json.Marshal(usr)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("[ERROR - USERS - CONTROLLER] => %v", err)
 		http.Error(res, http.StatusText(500), http.StatusInternalServerError)
 		return
 	}
@@ -116,16 +117,16 @@ func UserFind(res http.ResponseWriter, req *http.Request, params httprouter.Para
 }
 
 // UserUpdate Updates a user instance in the database
-func UserUpdate(res http.ResponseWriter, req *http.Request, params httprouter.Params) {
+func UserUpdate(res http.ResponseWriter, req *http.Request) {
 	if req.Method != "PUT" {
 		http.Error(res, http.StatusText(405), http.StatusMethodNotAllowed)
 		return
 	}
-
-	i := params.ByName("id")
+	vars := mux.Vars(req)
+	i := vars["id"]
 	id, err := strconv.Atoi(i)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("[ERROR - USERS - CONTROLLER] => %v", err)
 		http.Error(res, http.StatusText(404), http.StatusNotFound)
 		return
 	}
@@ -135,7 +136,7 @@ func UserUpdate(res http.ResponseWriter, req *http.Request, params httprouter.Pa
 
 	err = usr.UpdateUser()
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("[ERROR - USERS - CONTROLLER] => %v", err)
 		http.Error(res, http.StatusText(500), http.StatusInternalServerError)
 		return
 	}
@@ -148,7 +149,7 @@ func UserUpdate(res http.ResponseWriter, req *http.Request, params httprouter.Pa
 
 	rj, err := json.Marshal(r)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("[ERROR - USERS - CONTROLLER] => %v", err)
 		http.Error(res, http.StatusText(500), http.StatusInternalServerError)
 		return
 	}
@@ -159,15 +160,16 @@ func UserUpdate(res http.ResponseWriter, req *http.Request, params httprouter.Pa
 }
 
 // UserDelete deletes a user instance from the database
-func UserDelete(res http.ResponseWriter, req *http.Request, params httprouter.Params) {
+func UserDelete(res http.ResponseWriter, req *http.Request) {
 	if req.Method != "DELETE" {
 		http.Error(res, http.StatusText(405), http.StatusMethodNotAllowed)
 		return
 	}
-	i := params.ByName("id")
+	vars := mux.Vars(req)
+	i := vars["id"]
 	id, err := strconv.Atoi(i)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("[ERROR - USERS - CONTROLLER] => %v", err)
 		http.Error(res, http.StatusText(404), http.StatusNotFound)
 		return
 	}
@@ -189,7 +191,7 @@ func UserDelete(res http.ResponseWriter, req *http.Request, params httprouter.Pa
 
 	rj, err := json.Marshal(r)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("[ERROR - USERS - CONTROLLER] => %v", err)
 		http.Error(res, http.StatusText(500), http.StatusInternalServerError)
 		return
 	}

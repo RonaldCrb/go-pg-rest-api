@@ -54,11 +54,11 @@ func (o Offer) CreateOffer() error {
 	aff, err := rows.RowsAffected()
 
 	if aff != 1 {
-		err = errors.New("[ERROR] => More than 1 rows where affected")
+		err = errors.New("[ERROR - OFFERS - MODEL] => More than 1 rows where affected")
 	}
 
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("[ERROR - OFFERS - MODEL] => %v", err)
 		return err
 	}
 
@@ -67,12 +67,12 @@ func (o Offer) CreateOffer() error {
 
 // AllOffers returns a slice of Offer (all Offers in Offers table)
 func AllOffers() ([]Offer, error) {
-	q := "SELECT * FROM btcoffers ORDER BY CreatedAt ASC"
+	q := "SELECT * FROM btcoffers"
 
 	rows, err := config.DB.Query(q)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("[ERROR - OFFERS - MODEL] => %v", err)
 		return nil, err
 	}
 	defer rows.Close()
@@ -81,10 +81,10 @@ func AllOffers() ([]Offer, error) {
 
 	for rows.Next() {
 		ofr := Offer{}
-		err := rows.Scan(&ofr.ID, &ofr.Title, &ofr.Trader, &ofr.Reputation, &ofr.Price, &ofr.Min, &ofr.Max, &ofr.Index, &ofr.Bank, &ofr.Currency, &ofr.CreatedAt, &ofr.UpdatedAt)
+		err := rows.Scan(&ofr.ID, &ofr.Title, &ofr.Trader, &ofr.Bank, &ofr.Currency, &ofr.Reputation, &ofr.Price, &ofr.Min, &ofr.Max, &ofr.Index, &ofr.CreatedAt, &ofr.UpdatedAt)
 
 		if err != nil {
-			log.Fatal(err)
+			log.Printf("[ERROR - OFFERS - MODEL] => %v", err)
 			return nil, err
 		}
 
@@ -92,7 +92,7 @@ func AllOffers() ([]Offer, error) {
 	}
 
 	if err = rows.Err(); err != nil {
-		log.Fatal(err)
+		log.Printf("[ERROR - OFFERS - MODEL] => %v", err)
 		return nil, err
 	}
 	return ofrs, nil
@@ -106,9 +106,9 @@ func (o Offer) FindOffer() (Offer, error) {
 
 	ofr := Offer{}
 
-	err := row.Scan(&ofr.ID, &ofr.Title, &ofr.Trader, &ofr.Reputation, &ofr.Price, &ofr.Min, &ofr.Max, &ofr.Index, &ofr.Bank, &ofr.Currency, &ofr.CreatedAt, &ofr.UpdatedAt)
+	err := row.Scan(&ofr.ID, &ofr.Title, &ofr.Trader, &ofr.Bank, &ofr.Currency, &ofr.Reputation, &ofr.Price, &ofr.Min, &ofr.Max, &ofr.Index, &ofr.CreatedAt, &ofr.UpdatedAt)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("[ERROR - OFFERS - MODEL] => %v", err)
 		return Offer{}, err
 	}
 
@@ -120,7 +120,7 @@ func (o Offer) UpdateOffer() error {
 	q := "UPDATE btcoffers SET Title=$1, Trader=$2, Reputation=$3, Price=$4, Min=$5, Max=$6, Index=$7, Bank=$8, Currency=$9, UpdatedAt=now() WHERE ID = $10"
 
 	if o.Index <= 0 || o.Trader == "" || o.Title == "" || o.Currency == "" || o.Bank == "" {
-		err := errors.New("[ERROR] => Index, Trader, Title, Currency and Bank fields are Mandatory")
+		err := errors.New("[ERROR - OFFERS - MODEL] => Index, Trader, Title, Currency and Bank fields are Mandatory")
 		return err
 	}
 
@@ -138,11 +138,11 @@ func (o Offer) UpdateOffer() error {
 
 	aff, err := row.RowsAffected()
 	if aff != 1 {
-		err = errors.New("[ERROR] => More than 1 rows where affected")
+		err = errors.New("[ERROR - OFFERS - MODEL] => More than 1 rows where affected")
 	}
 
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("[ERROR - OFFERS - MODEL] => %v", err)
 		return err
 	}
 	return nil
@@ -154,7 +154,7 @@ func (o Offer) DeleteOffer() error {
 
 	_, err := config.DB.Exec(q, o.ID)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("[ERROR - OFFERS - MODEL] => %v", err)
 		return err
 	}
 

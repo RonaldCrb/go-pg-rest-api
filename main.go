@@ -7,29 +7,29 @@ import (
 	"github.com/RonaldCrb/go-pg-rest-api/home"
 	"github.com/RonaldCrb/go-pg-rest-api/offers"
 	"github.com/RonaldCrb/go-pg-rest-api/users"
-	"github.com/julienschmidt/httprouter"
+	"github.com/gorilla/mux"
 )
 
 func main() {
-
-	router := httprouter.New()
+	// main router instantiation
+	r := mux.NewRouter()
 
 	// basic routes
-	router.GET("/", home.Main)
+	r.HandleFunc("/", home.Main).Methods("GET")
 	// healtcheck routes
-	router.GET("/healthCheck", home.HealthCheck)
+	r.HandleFunc("/healthCheck", home.HealthCheck).Methods("GET")
 	// users routes
-	router.POST("/users", users.UserCreate)
-	router.GET("/users", users.UserIndex)
-	router.GET("/users/:id", users.UserFind)
-	router.PUT("/users/:id", users.UserUpdate)
-	router.DELETE("/users/:id", users.UserDelete)
+	r.HandleFunc("/users", users.UserCreate).Methods("POST")
+	r.HandleFunc("/users", users.UserIndex).Methods("GET")
+	r.HandleFunc("/users/{id}", users.UserFind).Methods("GET")
+	r.HandleFunc("/users/{id}", users.UserUpdate).Methods("PUT")
+	r.HandleFunc("/users/{id}", users.UserDelete).Methods("DELETE")
 	// offers routes
-	router.POST("/offers", offers.OfferCreate)
-	router.GET("/offers", offers.OfferIndex)
-	router.GET("/offers/:id", offers.OfferFind)
-	router.PUT("/offers/:id", offers.OfferUpdate)
-	router.DELETE("/offers/:id", offers.OfferDelete)
+	r.HandleFunc("/offers", offers.OfferCreate).Methods("POST")
+	r.HandleFunc("/offers", offers.OfferIndex).Methods("GET")
+	r.HandleFunc("/offers/{id}", offers.OfferFind).Methods("GET")
+	r.HandleFunc("/offers/{id}", offers.OfferUpdate).Methods("PUT")
+	r.HandleFunc("/offers/{id}", offers.OfferDelete).Methods("DELETE")
 
-	log.Fatal(http.ListenAndServe(":8080", router))
+	log.Fatal(http.ListenAndServe(":8080", r))
 }

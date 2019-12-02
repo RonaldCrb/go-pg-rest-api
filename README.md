@@ -81,9 +81,9 @@ CREATE TABLE btcoffers (
 	Bank VARCHAR(255) NOT NULL,
 	Currency VARCHAR(255) NOT NULL,
 	Reputation SMALLINT,
-	Price money,
-	Min money,
-	Max money,
+	Price FLOAT,
+	Min FLOAT,
+	Max FLOAT,
 	Index SMALLINT NOT NULL,
   CreatedAt         TIMESTAMP NOT NULL DEFAULT NOW(),
   UpdatedAt         TIMESTAMP NOT NULL DEFAULT NOW()

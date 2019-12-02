@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"net/http"
 	"time"
-
-	"github.com/julienschmidt/httprouter"
 )
 
 // Greeting ...
@@ -21,7 +19,7 @@ type HealthStatus struct {
 }
 
 // Main => main endpoint
-func Main(res http.ResponseWriter, req *http.Request, params httprouter.Params) {
+func Main(res http.ResponseWriter, req *http.Request) {
 	g := Greeting{Message: "Hello Visitor"}
 
 	gj, err := json.Marshal(g)
@@ -36,7 +34,7 @@ func Main(res http.ResponseWriter, req *http.Request, params httprouter.Params) 
 }
 
 // HealthCheck => utility endpoint for healthchecks
-func HealthCheck(res http.ResponseWriter, req *http.Request, params httprouter.Params) {
+func HealthCheck(res http.ResponseWriter, req *http.Request) {
 	currentTime := time.Now()
 
 	g := HealthStatus{

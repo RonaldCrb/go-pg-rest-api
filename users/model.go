@@ -39,11 +39,11 @@ func (u User) CreateUser() error {
 	aff, err := rows.RowsAffected()
 
 	if aff != 1 {
-		err = errors.New("[ERROR] => More than 1 rows where affected")
+		err = errors.New("[ERROR - USERS - MODEL] => More than 1 rows where affected")
 	}
 
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("[ERROR - USERS - MODEL] => %v", err)
 		return err
 	}
 
@@ -57,7 +57,7 @@ func AllUsers() ([]User, error) {
 	rows, err := config.DB.Query(q)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("[ERROR - USERS - MODEL] => %v", err)
 		return nil, err
 	}
 	defer rows.Close()
@@ -69,7 +69,7 @@ func AllUsers() ([]User, error) {
 		err := rows.Scan(&usr.ID, &usr.FirstName, &usr.LastName, &usr.Email, &usr.CreatedAt, &usr.UpdatedAt)
 
 		if err != nil {
-			log.Fatal(err)
+			log.Printf("[ERROR - USERS - MODEL] => %v", err)
 			return nil, err
 		}
 
@@ -77,7 +77,7 @@ func AllUsers() ([]User, error) {
 	}
 
 	if err = rows.Err(); err != nil {
-		log.Fatal(err)
+		log.Printf("[ERROR - USERS - MODEL] => %v", err)
 		return nil, err
 	}
 	return usrs, nil
@@ -93,7 +93,7 @@ func (u User) FindUser() (User, error) {
 
 	err := row.Scan(&usr.ID, &usr.FirstName, &usr.LastName, &usr.Email, &usr.CreatedAt, &usr.UpdatedAt)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("[ERROR - USERS - MODEL] => %v", err)
 		return User{}, err
 	}
 
@@ -105,7 +105,7 @@ func (u User) UpdateUser() error {
 	q := "UPDATE users SET FirstName=$1, LastName=$2, Email=$3, UpdatedAt=now() WHERE ID = $4"
 
 	if u.FirstName == "" || u.LastName == "" || u.Email == "" {
-		err := errors.New("[ERROR] => FirstName, LastName and Email fields are required")
+		err := errors.New("[ERROR - USERS - MODEL] => FirstName, LastName and Email fields are required")
 		return err
 	}
 
@@ -123,11 +123,11 @@ func (u User) UpdateUser() error {
 
 	aff, err := row.RowsAffected()
 	if aff != 1 {
-		err = errors.New("[ERROR] => More than 1 rows where affected")
+		err = errors.New("[ERROR - USERS - MODEL] => More than 1 rows where affected")
 	}
 
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("[ERROR - USERS - MODEL] => %v", err)
 		return err
 	}
 	return nil
@@ -139,7 +139,7 @@ func (u User) DeleteUser() error {
 
 	_, err := config.DB.Exec(q, u.ID)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("[ERROR - USERS - MODEL] => %v", err)
 		return err
 	}
 
