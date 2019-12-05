@@ -15,13 +15,13 @@ var DB *sql.DB
 func init() {
 	var err error
 	// opens a connection with the database
-	DB, err = sql.Open("postgres", "postgres://postgres:postgres@localhost/postgres?sslmode=disable")
+	DB, err = sql.Open("postgres", "postgres://postgres:postgres@postgres/postgres?sslmode=disable")
 	if err != nil {
-		panic(err)
+		log.Printf("[warning] => %v", err)
 	}
 
 	if err = DB.Ping(); err != nil {
-		panic(err)
+		log.Printf("[warning] => %v", err)
 	}
 
 	// logs on connection success

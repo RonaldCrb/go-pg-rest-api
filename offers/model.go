@@ -160,3 +160,31 @@ func (o Offer) DeleteOffer() error {
 
 	return nil
 }
+
+func CreateOffersTable() error {
+
+	// create required tables
+	offersTable := `
+		CREATE TABLE btcoffers (
+		  ID 					SERIAL PRIMARY KEY NOT NULL,
+		  Title 			VARCHAR(255) NOT NULL,
+			Trader 			VARCHAR(255) NOT NULL,
+			Bank 				VARCHAR(255) NOT NULL,
+			Currency 		VARCHAR(255) NOT NULL,
+			Reputation	SMALLINT,
+			Price 			FLOAT,
+			Min 				FLOAT,
+			Max 				FLOAT,
+			Index 			SMALLINT NOT NULL,
+		  CreatedAt   TIMESTAMP NOT NULL DEFAULT NOW(),
+		  UpdatedAt   TIMESTAMP NOT NULL DEFAULT NOW()
+		);
+	`
+
+	_, err := config.DB.Exec(offersTable)
+	if err != nil {
+		log.Printf("[WARNING - CONFIG - DB] => %v", err)
+	}
+
+	return nil
+}

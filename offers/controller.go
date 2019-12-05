@@ -235,3 +235,35 @@ func OfferDelete(res http.ResponseWriter, req *http.Request) {
 	res.WriteHeader(http.StatusCreated)
 	fmt.Fprintf(res, "%s\n", rj)
 }
+
+// OfferCreateTable creates a table in the database
+func OfferCreateTable(res http.ResponseWriter, req *http.Request) {
+	if req.Method != "GET" {
+		http.Error(res, http.StatusText(405), http.StatusMethodNotAllowed)
+		return
+	}
+
+	err := CreateOffersTable()
+
+	if err != nil {
+		http.Error(res, http.StatusText(500), http.StatusInternalServerError)
+		return
+	}
+
+	r := GenericResponse{
+		StatusCode: 201,
+		Status:     "btcOffer Table succesfully created",
+		TimeStamp:  time.Now(),
+	}
+
+	rj, err := json.Marshal(r)
+	if err != nil {
+		log.Printf("[ERROR - OFFERS - CONTROLLER] => %v", err)
+		http.Error(res, http.StatusText(500), http.StatusInternalServerError)
+		return
+	}
+
+	res.Header().Set("Content-Type", "application/json")
+	res.WriteHeader(http.StatusCreated)
+	fmt.Fprintf(res, "%s\n", rj)
+}

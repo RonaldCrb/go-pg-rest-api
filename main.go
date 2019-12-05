@@ -25,6 +25,7 @@ func main() {
 	r.HandleFunc("/users/{id}", users.UserUpdate).Methods("PUT")
 	r.HandleFunc("/users/{id}", users.UserDelete).Methods("DELETE")
 	// offers routes
+	r.HandleFunc("/offers/createTable", offers.OfferCreateTable).Methods("GET")
 	r.HandleFunc("/offers", offers.OfferCreate).Methods("POST")
 	r.HandleFunc("/offers", offers.OfferIndex).Methods("GET")
 	r.HandleFunc("/offers/{id}", offers.OfferFind).Methods("GET")
