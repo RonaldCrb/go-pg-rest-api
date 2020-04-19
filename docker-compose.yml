@@ -6,17 +6,23 @@ services:
     command: ./main
     ports:
       - 8080:8080
-    depends_on:
-      - postgres
+    expose:
+      - 8080
     volumes:
       - .:/app
-
+    depends_on: 
+      - postgres
+    
   postgres:
     image: postgres:11-alpine
     volumes:
       - postgres:/var/lib/psql
     ports:
-    - 5432:5432
+      - 5432:5432
+    expose:
+      - 5432
+    environment:
+      - POSTGRES_PASSWORD=postgres
 
 volumes:
   postgres:

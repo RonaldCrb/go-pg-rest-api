@@ -13,6 +13,7 @@ type User struct {
 	ID        int
 	FirstName string
 	LastName  string
+	Password  string
 	Email     string
 	CreatedAt time.Time
 	UpdatedAt time.Time
@@ -21,8 +22,8 @@ type User struct {
 // CreateUser creates a new user instance
 func (u User) CreateUser() error {
 	usr := `INSERT INTO 
-						users (firstName, lastName, email)
-						VALUES ($1, $2, $3)`
+			users (firstName, lastName, email, password)
+			VALUES ($1, $2, $3, $4)`
 
 	stmt, err := config.DB.Prepare(usr)
 	if err != nil {
@@ -30,7 +31,7 @@ func (u User) CreateUser() error {
 	}
 	defer stmt.Close()
 
-	rows, err := stmt.Exec(u.FirstName, u.LastName, u.Email)
+	rows, err := stmt.Exec(u.FirstName, u.LastName, u.Email, u.Password)
 	if err != nil {
 		return err
 	}
@@ -66,7 +67,7 @@ func AllUsers() ([]User, error) {
 
 	for rows.Next() {
 		usr := User{}
-		err := rows.Scan(&usr.ID, &usr.FirstName, &usr.LastName, &usr.Email, &usr.CreatedAt, &usr.UpdatedAt)
+		err := rows.Scan(&usr.ID, &usr.FirstName, &usr.LastName, &usr.Email, &usr.Password, &usr.CreatedAt, &usr.UpdatedAt)
 
 		if err != nil {
 			log.Printf("[ERROR - USERS - MODEL] => %v", err)
@@ -91,7 +92,7 @@ func (u User) FindUser() (User, error) {
 
 	usr := User{}
 
-	err := row.Scan(&usr.ID, &usr.FirstName, &usr.LastName, &usr.Email, &usr.CreatedAt, &usr.UpdatedAt)
+	err := row.Scan(&usr.ID, &usr.FirstName, &usr.LastName, &usr.Email, &usr.Password, &usr.CreatedAt, &usr.UpdatedAt)
 	if err != nil {
 		log.Printf("[ERROR - USERS - MODEL] => %v", err)
 		return User{}, err
@@ -102,7 +103,7 @@ func (u User) FindUser() (User, error) {
 
 // UpdateUser updates the data for a user instance in the database
 func (u User) UpdateUser() error {
-	q := "UPDATE users SET FirstName=$1, LastName=$2, Email=$3, UpdatedAt=now() WHERE ID = $4"
+	q := "UPDATE users SET FirstName=$1, LastName=$2, Email=$3, Password=$4 UpdatedAt=now() WHERE ID = $5"
 
 	if u.FirstName == "" || u.LastName == "" || u.Email == "" {
 		err := errors.New("[ERROR - USERS - MODEL] => FirstName, LastName and Email fields are required")
@@ -115,7 +116,7 @@ func (u User) UpdateUser() error {
 	}
 	defer stmt.Close()
 
-	row, err := stmt.Exec(u.FirstName, u.LastName, u.Email, u.ID)
+	row, err := stmt.Exec(u.FirstName, u.LastName, u.Email, u.Password, u.ID)
 	if err != nil {
 		return err
 	}
@@ -142,6 +143,63 @@ func (u User) DeleteUser() error {
 		log.Printf("[ERROR - USERS - MODEL] => %v", err)
 		return err
 	}
+
+	return nil
+}
+
+// Register => register a new user public endpoint
+func (u User) Register() error {
+	usr := `INSERT INTO 
+			users (firstName, lastName, email, password)
+			VALUES ($1, $2, $3, $4)`
+
+	stmt, err := config.DB.Prepare(usr)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	// encryptar password aqui!
+	// encryptar password aqui!
+	// encryptar password aqui!
+	// encryptar password aqui!
+	// encryptar password aqui!
+
+	rows, err := stmt.Exec(u.FirstName, u.LastName, u.Email, u.Password)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	aff, err := rows.RowsAffected()
+
+	if aff != 1 {
+		err = errors.New("[ERROR - USERS - MODEL] => More than 1 rows where affected")
+	}
+
+	if err != nil {
+		log.Printf("[ERROR - USERS - MODEL] => %v", err)
+		return err
+	}
+
+	return nil
+}
+
+// Login => authenticate against this API
+func (u User) Login() error {
+	q := "SELECT * FROM users WHERE email = $1"
+
+	row := config.DB.QueryRow(q, u.Email)
+
+	usr := User{}
+
+	err := row.Scan(&usr.ID, &usr.FirstName, &usr.LastName, &usr.Email, &usr.Password, &usr.CreatedAt, &usr.UpdatedAt)
+	if err != nil {
+		log.Printf("[ERROR - USERS - MODEL] => %v", err)
+		return err
+	}
+
+	// decrypt and compare passwords
 
 	return nil
 }

@@ -13,53 +13,28 @@ import (
 var DB *sql.DB
 
 func init() {
+
 	var err error
-	// opens a connection with the database
-	DB, err = sql.Open("postgres", "postgres://postgres:postgres@postgres/postgres?sslmode=disable")
+
+	// opens a database connection using the URL from environment.go (PgURL)
+	DB, err = sql.Open("postgres", PgURL)
 	if err != nil {
 		log.Printf("[warning] => %v", err)
+	} else {
+		fmt.Println("PostgreSQL Database ready to GO!")
 	}
-
-	if err = DB.Ping(); err != nil {
-		log.Printf("[warning] => %v", err)
-	}
-
-	// logs on connection success
-	fmt.Println("PostgreSQL Database ready to GO!")
-
-	// create required tables
-	offersTable := `
-		CREATE TABLE btcoffers (
-		  ID 					SERIAL PRIMARY KEY NOT NULL,
-		  Title 			VARCHAR(255) NOT NULL,
-			Trader 			VARCHAR(255) NOT NULL,
-			Bank 				VARCHAR(255) NOT NULL,
-			Currency 		VARCHAR(255) NOT NULL,
-			Reputation	SMALLINT,
-			Price 			FLOAT,
-			Min 				FLOAT,
-			Max 				FLOAT,
-			Index 			SMALLINT NOT NULL,
-		  CreatedAt   TIMESTAMP NOT NULL DEFAULT NOW(),
-		  UpdatedAt   TIMESTAMP NOT NULL DEFAULT NOW()
-		);
-	`
 
 	usersTable := `
 		CREATE TABLE users (
 			id       	  SERIAL PRIMARY KEY NOT NULL,
 			firstName   VARCHAR(255) NOT NULL,
-			LastName 	  VARCHAR(255) NOT NULL,
+			lastName 	  VARCHAR(255) NOT NULL,
 			email		  	VARCHAR(255) NOT NULL,
+			password  	VARCHAR(255) NOT NULL,
   		createdAt   TIMESTAMP NOT NULL DEFAULT NOW(),
   		updatedAt   TIMESTAMP NOT NULL DEFAULT NOW()
 		);
 	`
-
-	_, err = DB.Exec(offersTable)
-	if err != nil {
-		log.Printf("[WARNING - CONFIG - DB] => %v", err)
-	}
 
 	_, err = DB.Exec(usersTable)
 	if err != nil {
