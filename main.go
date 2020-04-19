@@ -1,11 +1,14 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/RonaldCrb/go-pg-rest-api/home"
 	"github.com/RonaldCrb/go-pg-rest-api/users"
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
 
@@ -28,8 +31,9 @@ func main() {
 	r.HandleFunc("/users/{id}", users.UserFind).Methods("GET")
 	r.HandleFunc("/users/{id}", users.UserUpdate).Methods("PUT")
 	r.HandleFunc("/users/{id}", users.UserDelete).Methods("DELETE")
-	r.HandleFunc("/auth/register", users.Register).Methods("POST")
-	r.HandleFunc("/auth/login", users.Login).Methods("POST")
 
-	log.Fatal(http.ListenAndServe(":8081", r))
+	fmt.Println("Cerberus ready to GO!")
+	// implement logging middleware, initiate server in port, log fatal in case of error
+	log.Fatal(http.ListenAndServe(":8080", handlers.LoggingHandler(os.Stdout, r)))
+
 }

@@ -21,11 +21,11 @@ func init() {
 	if err != nil {
 		log.Printf("[warning] => %v", err)
 	} else {
-		fmt.Println("PostgreSQL Database ready to GO!")
+		fmt.Println("Database ready to GO!")
 	}
 
 	usersTable := `
-		CREATE TABLE users (
+		CREATE TABLE IF NOT EXISTS users (
 			id       	  SERIAL PRIMARY KEY NOT NULL,
 			firstName   VARCHAR(255) NOT NULL,
 			lastName 	  VARCHAR(255) NOT NULL,
